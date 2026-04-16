@@ -6,24 +6,33 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // set api prefix
+  // Project description
   app.setGlobalPrefix('api/v1');
 
-  // set Global validation
+  // Set Global validation
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
-      transformOptions: { enableImplicitConversion: true },
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
-  // Todo : add cors
+
+  // Enable CORS
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS?.split(',') ?? 'http://localhost:3000',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+  });
 
   // Enable Swagger docs
   const config = new DocumentBuilder()
-    .setTitle('Kroynext API')
-    .setDescription('The Kroynext API description')
+    .setTitle('API Documentation')
+    .setDescription('API documentation for the application')
     .setVersion('1.0')
     .addTag('auth', 'Authentication related endpoints')
     .addBearerAuth(
@@ -43,35 +52,33 @@ async function bootstrap() {
         scheme: 'bearer',
         bearerFormat: 'JWT',
         name: 'Refresh-JWT',
-        description: 'Enter Refresh JWT token',
+        description: 'Enter refresh JWT token',
         in: 'header',
       },
-      'Refresh-JWT',
+      'JWT-refresh',
     )
     .addServer('http://localhost:3000', 'Development server')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, document,{
+  SwaggerModule.setup('api/docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
       tagsSorter: 'alpha',
       operationsSorter: 'alpha',
     },
-    customSiteTitle: 'Kroynext API Docs',
-    customfavIcon : 'https:nextjs.com/favicjon.ico',
+    customSiteTitle: 'API Documentation',
+    customfavIcon: 'https://nestjs.com/img/logo-small.svg',
     customCss: `
-    .swagger-ui .topbar { display: none }
-    .swagger-ui .info {margin: 50px 0},
-    .swagger-ui .info .title {color: #fff}`,
-
+      .swagger-ui .topbar {display: none}
+      .swagger-ui .info { margin: 50px 0; }
+      .swagger-ui .info .title {color: #4A90E2;}
+    `,
   });
 
-  // start server
   await app.listen(process.env.PORT ?? 3000);
 }
-
-bootstrap().catch((err) => {
-  Logger.error('Error starting server', err);
+bootstrap().catch((error) => {
+  Logger.error('Error starting server', error);
   process.exit(1);
 });
