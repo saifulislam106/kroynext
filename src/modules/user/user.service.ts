@@ -22,7 +22,6 @@ export class UserService {
        lastName: true,
        createdAt: true,
        updatedAt: true,
-       password: false,
      }
    });
 
@@ -43,7 +42,6 @@ export class UserService {
         lastName: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
       },
       orderBy: {
         createdAt: 'desc',
@@ -64,7 +62,6 @@ export class UserService {
         lastName: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
       },
     });
   }
@@ -103,7 +100,6 @@ export class UserService {
         lastName: true,
         createdAt: true,
         updatedAt: true,
-        password: false,
       },
     })
     return updatedUser;
@@ -146,13 +142,6 @@ export class UserService {
     return {message: 'Password changed successfully'};
   }
 
-  // async removeProfile(userId: string): Promise<{message: string}> {
-  //   return await this.prisma.user.delete({
-  //     where: {
-  //       id: userId,
-  //     },
-  //   });
-  // }
 
  async remove(userId: string): Promise<{message: string}> {
   const user = await this.prisma.user.findUnique({

@@ -9,6 +9,7 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     }
 
     canActivate(context: ExecutionContext) {
-        return super.canActivate(context);
-    }
+  const result = super.canActivate(context);
+  return result;
+}
 }
