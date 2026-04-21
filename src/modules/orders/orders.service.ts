@@ -24,6 +24,10 @@ export class OrdersService {
   ): Promise<OrderApiResponseDto<OrderResponseDto>> {
     const { items, shippingAddress } = createOrderDto;
 
+    // const productId = items.map((item)=>item.productId);  // Best practice
+    // const products = await this.prisma.product.findMany({
+    //  where: { id: { in: productIds } }
+// });
     for (const item of items) {
       const product = await this.prisma.product.findUnique({
         where: { id: item.productId },
