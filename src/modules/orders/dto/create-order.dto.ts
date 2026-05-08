@@ -12,12 +12,13 @@ import {
 } from 'class-validator';
 
 class OrderItemDto {
-  @ApiProperty()
+
+  @ApiProperty({ example: '550e8400-e29b-41d4-a716-446655440000' })
   @IsNotEmpty()
   @IsString()
   productId: string;
 
-  @ApiProperty()
+  @ApiProperty({ example: 2 })
   @IsNotEmpty()
   @IsNumber()
   quantity: number;
